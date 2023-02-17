@@ -1,3 +1,4 @@
+import { DeleteMovieDto } from './dto/delete-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import {
@@ -10,15 +11,15 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Movie } from './entities/movie.entity';
+import { Actor } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
 @Controller('movies') // 기본 url 엔트리 포인트
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
   @Get()
-  getAll(): Movie[] {
-    return this.moviesService.getAll();
+  async getAll(): Promise<Actor[]> {
+    return await this.moviesService.getAll();
   }
 
   @Get('search') // @Get(':id') 보다 위에 있어야 작동함
@@ -27,10 +28,10 @@ export class MoviesController {
   }
 
   @Get(':id')
-  getOne(@Param('id') movieId: number): Movie {
+  async getOne(@Param('id') movieId: number): Promise<Actor> {
     console.log(typeof movieId);
 
-    return this.moviesService.getOne(movieId);
+    return await this.moviesService.getOne(movieId);
   }
 
   @Post()
@@ -39,12 +40,15 @@ export class MoviesController {
   }
 
   @Delete(':id')
-  delete(@Param('id') movieId: number) {
-    return this.moviesService.deleteOne(movieId);
+  async delete(@Param('id') movieId: number, @Body() data: DeleteMovieDto) {
+    return await this.moviesService.deleteOne(movieId, data);
   }
 
   @Patch(':id')
-  patch(@Param('id') movieId: number, @Body() updateData: UpdateMovieDto) {
-    return this.moviesService.update(movieId, updateData);
+  async patch(
+    @Param('id') movieId: number,
+    @Body() updateData: UpdateMovieDto,
+  ) {
+    return await this.moviesService.update(movieId, updateData);
   }
 }

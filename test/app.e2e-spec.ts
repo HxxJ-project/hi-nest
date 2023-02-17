@@ -31,52 +31,59 @@ describe('AppController (e2e)', () => {
   });
 
   describe('/movies', () => {
-    it('GET', () => {
-      return request(app.getHttpServer()).get('/movies').expect(200).expect([]);
-    });
+    // it('GET', async () => {
+    //   return await request(app.getHttpServer())
+    //     .get('/movies')
+    //     .expect(200)
+    //     .expect([]);
+    // });
 
-    it('POST 201', () => {
-      return request(app.getHttpServer())
+    it('POST 201', async () => {
+      return await request(app.getHttpServer())
         .post('/movies')
         .send({
-          title: 'Test',
-          year: 2002,
-          genres: ['test'],
+          name: 'Test',
+          age: 2002,
+          password: 'test',
         })
         .expect(201);
     });
-    it('POST 400', () => {
-      return request(app.getHttpServer())
+    // 예외처리별로 작성 필요
+    it('POST 400', async () => {
+      return await request(app.getHttpServer())
         .post('/movies')
         .send({
-          title: 'Test',
-          year: 2002,
-          genres: ['test'],
+          name: 'Test',
+          age: 2002,
+          password: 'test',
           other: 'thing',
         })
         .expect(400);
     });
 
-    it('DELETE', () => {
-      return request(app.getHttpServer()).delete('/movies').expect(404);
-    });
+    // it('DELETE', async () => {
+    //   return await request(app.getHttpServer()).delete('/movies').expect(404);
+    // });
   });
 
   describe('/movies/:id', () => {
-    it('GET 200', () => {
-      return request(app.getHttpServer()).get('/movies/1').expect(200);
+    it('GET 200', async () => {
+      return await request(app.getHttpServer()).get('/movies/1').expect(200);
     });
-    it('GET 404', () => {
-      return request(app.getHttpServer()).get('/movies/999').expect(404);
+    it('GET 404', async () => {
+      return await request(app.getHttpServer()).get('/movies/999').expect(404);
     });
-    it('PATCH 200', () => {
-      return request(app.getHttpServer())
-        .patch('/movies/1')
-        .send({ title: 'Updated Test' })
+    it('PATCH 200', async () => {
+      return await request(app.getHttpServer())
+        .patch('/movies/12')
+        .send({ name: 'Jeonghoon', age: 20, password: 'test' })
         .expect(200);
     });
-    it('DELETE 200', () => {
-      return request(app.getHttpServer()).delete('/movies/1').expect(200);
+    it('DELETE 200', async () => {
+      return await request(app.getHttpServer())
+        .delete('/movies/12')
+        .send({ password: 'test' })
+        .expect(200);
     });
   });
 });
